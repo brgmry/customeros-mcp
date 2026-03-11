@@ -1,0 +1,21 @@
+{
+  "name": "customeros-mcp",
+  "version": "1.0.0",
+  "description": "CustomerOS MCP server — tickets, accounts, team management via Supabase",
+  "type": "module",
+  "bin": {
+    "customeros-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0",
+    "@types/node": "^22.0.0"
+  }
+}
