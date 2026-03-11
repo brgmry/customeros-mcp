@@ -32,12 +32,14 @@ bun run build # or npm run build
 
 ### 2. Environment Variables
 
+Contact bergen@throxy.com for access credentials.
+
 Set these in your shell or `.env`:
 
 ```bash
-CUSTOMEROS_SUPABASE_URL=https://your-project.supabase.co
-CUSTOMEROS_SUPABASE_ANON_KEY=your-anon-key
-CUSTOMEROS_BERGEN_EMPLOYEE_ID=your-employee-uuid  # optional, for get_my_tickets
+CUSTOMEROS_SUPABASE_URL=<provided>
+CUSTOMEROS_SUPABASE_ANON_KEY=<provided>
+CUSTOMEROS_BERGEN_EMPLOYEE_ID=<your-employee-uuid>  # optional, for get_my_tickets
 ```
 
 ### 3. Configure MCP Client
