@@ -2,7 +2,33 @@
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+import { homedir } from "node:os";
 import { z } from "zod";
+
+// ── Load env from file ──────────────────────────────────────
+
+function loadEnvFile(path: string): void {
+  try {
+    const content = readFileSync(path, "utf-8");
+    for (const line of content.split("\n")) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith("#")) continue;
+      const eqIdx = trimmed.indexOf("=");
+      if (eqIdx === -1) continue;
+      const key = trimmed.slice(0, eqIdx).replace(/^export\s+/, "").trim();
+      const val = trimmed.slice(eqIdx + 1).trim().replace(/^["']|["']$/g, "");
+      if (!process.env[key]) process.env[key] = val;
+    }
+  } catch {
+    // File not found is fine — fall through to env vars
+  }
+}
+
+// Load from .env.shared, then project-local customeros.env as fallbacks
+loadEnvFile(join(homedir(), "Documents", ".env.shared"));
+loadEnvFile(join(homedir(), "Documents", "customer-success-platform", "customeros.env"));
 
 // ── Config ──────────────────────────────────────────────────
 
@@ -12,7 +38,8 @@ const BERGEN_EMPLOYEE_ID = process.env.CUSTOMEROS_BERGEN_EMPLOYEE_ID;
 
 if (!SUPABASE_URL || !SUPABASE_KEY) {
   console.error(
-    "Missing env: CUSTOMEROS_SUPABASE_URL, CUSTOMEROS_SUPABASE_ANON_KEY"
+    "Missing env: CUSTOMEROS_SUPABASE_URL, CUSTOMEROS_SUPABASE_ANON_KEY\n" +
+    "Set them in ~/Documents/.env.shared or pass as environment variables."
   );
   process.exit(1);
 }
