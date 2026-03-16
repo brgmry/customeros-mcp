@@ -406,6 +406,8 @@ server.tool(
         "phone",
         "client_digest",
         "customeros_feedback",
+        "request_list",
+        "l1_test",
       ])
       .describe("Ticket template"),
     account: z.string().describe("Account name (fuzzy search)"),
@@ -502,6 +504,7 @@ server.tool(
       .enum(["todo", "in_progress", "in_review", "done", "backlog", "cancelled"])
       .optional()
       .describe("New status"),
+    template: z.string().optional().describe("New template slug (e.g. request_list, l4)"),
     assignee: z.string().optional().describe("New assignee (fuzzy search)"),
     deadline: z.string().optional().describe("New deadline (YYYY-MM-DD)"),
     title: z.string().optional().describe("New title"),
@@ -510,7 +513,7 @@ server.tool(
       .optional()
       .describe("New description (supports markdown)"),
   },
-  async ({ ticket, status, assignee, deadline, title, description }) => {
+  async ({ ticket, status, template, assignee, deadline, title, description }) => {
     const filter = ticket.startsWith("TK-")
       ? `identifier=eq.${ticket}`
       : `id=eq.${ticket}`;
@@ -523,6 +526,7 @@ server.tool(
       payload.employee_name = member.name;
     }
     if (status) payload.status = status;
+    if (template) payload.template = template;
     if (deadline) payload.deadline = deadline;
     if (title) payload.title = title;
     if (description) payload.description = markdownToHtml(description);
